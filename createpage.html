@@ -1,0 +1,58 @@
+<html>
+    <body>
+
+        <form action='' method = "POST">
+            <p>employee ID <input type = "integer" name = "employee_id" /></p>
+            <p>name <input type = "text" name = "name" /></p>
+            <p>age <input type = "integer" name = "age" /></p>
+            <p>gender
+                <select name="gender" id="gender">
+                    <option value="">Select</option>
+                    <option value="Male">male</option>
+                    <option value="Female">female</option>
+                </select>
+            </p>
+            <!-- <p>mode <br>
+                <input type="radio" id="workfromoffice" name="mode" value="Workfromoffice">
+                <label for="workfromoffice">Work From Office</label><br>
+                <input type="radio" id="workfromhome" name="mode" value="Workfromhome">
+                <label for="workfromhome">Work From Home</label><br>
+            </p> -->
+
+            <p> mode: <br>
+                <input type="radio" name="mode" id="WFO" value="WFO">Work From Office<br> 
+                <input type="radio" name="mode" id="WFH" value="WFH">Work From Home<br> 
+            </p>
+            <p>position <input type = "text" name = "position" /></p>
+            <p>email <input type = "text" name = "email" /></p>
+            <p><input type = "submit" value = "Submit" onclick="return Validate()"/></p>
+        </form>
+
+    </body>
+</html>
+
+<script type="text/javascript">
+    function Validate() {
+        var gender = document.getElementById("gender");
+        if (gender.value == "") {
+            //If the "Please Select" option is selected display error.
+            alert("Please select a gender!");
+            return false;
+        }
+
+        var radios = document.getElementsByName("mode");
+        var formValid = false;
+
+        var i = 0;
+        while (!formValid && i < radios.length) {
+            if (radios[i].checked) formValid = true;
+            i++;        
+        }
+
+        if (!formValid) alert("Please select a mode!");
+        return formValid;
+
+        // return true;
+    }
+
+</script>
