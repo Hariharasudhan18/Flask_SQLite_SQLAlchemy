@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, jsonify
 from models import db,EmployeeModel
  
 app = Flask(__name__)
@@ -26,22 +26,41 @@ def create():
         position = request.form['position']
         email = request.form['email']
         employee = EmployeeModel(employee_id=employee_id, name=name, age=age, gender=gender, mode=mode, position = position, email=email)
-        db.session.add(employee)
-        db.session.commit()
-        return redirect('/data')
+
+        test = EmployeeModel.query.filter_by(email=email).first()
+        if test:
+            return jsonify("Email already exist"), 409
+        else:
+            db.session.add(employee)
+            db.session.commit()
+            return redirect('/data')
 
 
 @app.route('/data')
 def RetrieveDataList():
     employees = EmployeeModel.query.all()
-    return render_template('datalist.html',employees = employees)
+    # return render_template('datalist.html',employees = employees)
+    output = []
+    for employee in employees:
+        my_dict= {"employee_id": employee.employee_id,"employee_name":employee.name}
+        output.append(my_dict)
+    return jsonify(output)
 
 
 @app.route('/data/<int:id>')
 def RetrieveSingleEmployee(id):
     employee = EmployeeModel.query.filter_by(employee_id=id).first()
     if employee:
-        return render_template('data.html', employee = employee)
+        # return render_template('data.html', employee = employee)
+        return jsonify(
+        employee_id = employee.employee_id,
+        name = employee.name,
+        age = employee.age,
+        gender = employee.gender,
+        mode = employee.mode,
+        position = employee.position,
+        email = employee.email
+        )   
     return f"Employee with id ={id} Doenst exist"
 
 
